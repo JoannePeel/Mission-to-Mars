@@ -27,4 +27,6 @@ Two routes were created:
 
 * Finally, a template HTML file [index.html](https://github.com/JoannePeel/Mission-to-mars/blob/master/templates/index.html) was created which takes the mars data dictionary and displays all of the data in the appropriate HTML elements. 
 
-The final product looks as follows ![](https://github.com/JoannePeel/Mission-to-mars/blob/master/screen_shot_mars_mission.png). Data can be refreshed, clicking on the "Get Mars Data!" button.
+The final product looks as follows and data can be refreshed, clicking on the "Get Mars Data!" button.
+
+![](https://github.com/JoannePeel/Mission-to-mars/blob/master/screen_shot_mars_mission.png)
