@@ -1,14 +1,13 @@
+from bs4 import BeautifulSoup
 from splinter import Browser
-from bs4 import BeautifulSoup as bs
-import time
-import pandas as pd 
+import pandas as pd
+import requests
 
 
 def init_browser():
-    # @NOTE: Replace the path with your actual path to the chromedriver
-    # executable_path = {"executable_path": "/usr/local/bin/chromedriver"} # Mac
     executable_path = {"executable_path": "chromedriver.exe"} # Windows
     return Browser("chrome", **executable_path, headless=False)
+#Create dicyionary to store data
 mars_data = {}
 # NASA MARS NEWS
 def scrape_news():
@@ -19,11 +18,9 @@ def scrape_news():
     url = 'https://mars.nasa.gov/news/'
     browser.visit(url)
 
-    time.sleep(1)
-
     # Scrape page into Soup
     html = browser.html
-    soup = bs(html, "html.parser")
+    soup = BeautifulSoup(html, "html.parser")
 
     # Find the news title and news paragraph
     title = soup.find('div', class_='content_title').find('a').text
@@ -34,9 +31,9 @@ def scrape_news():
     mars_data["title"] = title
     mars_data["news"] = news
     
-    browser.quit()
+    
     return mars_data
-
+    browser.quit()
 # FEATURED IMAGE
 
 def scrape_mars_image():
@@ -48,13 +45,12 @@ def scrape_mars_image():
     image_url_featured = 'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
     browser.visit(image_url_featured)# Visit Mars Space Images 
 
-    time.sleep(1)
     # HTML Object 
     
     html_image = browser.html
 
     # Parse HTML with Beautiful Soup
-    soup = bs(html_image, 'html.parser')
+    soup = BeautifulSoup(html_image, 'html.parser')
 
     # Retrieve background-image url from style tag 
     featured_image_url  = soup.find('article')['style'].replace('background-image: url(','').replace(');', '')[1:-1]
@@ -70,7 +66,6 @@ def scrape_mars_image():
     
     mars_data["img"] = featured_image_url
     return mars_data
-    
     browser.quit()
 
 # Mars Weather 
@@ -87,7 +82,7 @@ def scrape_mars_weather():
     html_weather = browser.html
 
     # Parse HTML with Beautiful Soup
-    soup = bs(html_weather, 'html.parser')
+    soup = BeautifulSoup(html_weather, 'html.parser')
 
     # Find all elements that contain tweets
     
@@ -108,8 +103,6 @@ def scrape_mars_weather():
     mars_data['weather_tweet'] = weather_tweet
      
     return mars_data
-    
-
     browser.quit()
 
 
@@ -153,7 +146,7 @@ def scrape_mars_hemispheres():
     html_hemispheres = browser.html
 
     # Parse HTML with Beautiful Soup
-    soup = bs(html_hemispheres, 'html.parser')
+    soup = BeautifulSoup(html_hemispheres, 'html.parser')
 
     # Retreive all items that contain mars hemispheres information
     items = soup.find_all('div', class_='item')
@@ -179,7 +172,7 @@ def scrape_mars_hemispheres():
         partial_img_html = browser.html
             
             # Parse HTML with Beautiful Soup for every individual hemisphere information website 
-        soup = bs( partial_img_html, 'html.parser')
+        soup = BeautifulSoup( partial_img_html, 'html.parser')
             
             # Retrieve full image source 
         img_url = hemispheres_main_url + soup.find('img', class_='wide-image')['src']
@@ -187,12 +180,10 @@ def scrape_mars_hemispheres():
             # Append the retreived information into a list of dictionaries 
         hemisphere_image_urls.append({"title" : title, "img_url" : img_url})
 
-        mars_data['hemisphere_image_urls'] = hemisphere_image_urls
+    mars_data['hemisphere_image_urls'] = hemisphere_image_urls
 
         
             # Return mars_data dictionary 
 
-        return mars_data
-    
-
-        browser.quit()    
+    return mars_data
+    browser.quit()    

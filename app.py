@@ -1,14 +1,14 @@
 from flask import Flask, render_template, redirect
 from flask_pymongo import PyMongo
-import test
-
+#import test
+import test 
 # Create an instance of Flask
 app = Flask(__name__)
 
 # Use PyMongo to establish Mongo connection
-mongo = PyMongo(app, uri="mongodb://localhost:27017/mars_app")
-
-
+#mongo = PyMongo(app, uri="mongodb://localhost:27017/mars_app")
+app.config["MONGO_URI"] = "mongodb://localhost:27017/mars_app"
+mongo = PyMongo(app)
 # Route to render index.html template using data from Mongo
 @app.route("/")
 def home():
@@ -29,7 +29,7 @@ def scrape():
     mars_data = test.scrape_mars_image()
     mars_data = test.scrape_mars_weather()
     mars_data = test.scrape_mars_facts()
-    mars_data = test.scrape_mars_hemispheres
+    mars_data = test.scrape_mars_hemispheres()
 
     # Update the Mongo database using update and upsert=True
     mongo.db.collection.update({}, mars_data, upsert=True)
